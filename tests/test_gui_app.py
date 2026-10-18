@@ -193,3 +193,11 @@ def test_batch_start_threads_and_finishes(qapp, tmp_path, monkeypatch):
     summary = window.result_text.toPlainText() + window.status_label.text()
     assert "成功" in summary
     window.close()
+
+
+def test_app_icon_loaded(qapp):
+    from df2ulog.gui.widgets import app_icon
+
+    icon = app_icon()
+    assert not icon.isNull()
+    assert icon.availableSizes()

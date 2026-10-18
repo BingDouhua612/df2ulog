@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GUI language switch (Chinese / English) in the top-right corner; the
   choice is persisted with `QSettings`.
 - Bilingual README (`README.md` / `README.en.md`).
+- Hand-drawn `.bin/.log to ulog` app icon (window icon + packaged exe icon,
+  multi-resolution `.ico`).
 
 ## [0.1.0] - 2026-10-18
 

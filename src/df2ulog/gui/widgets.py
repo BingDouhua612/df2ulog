@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html
+from importlib.resources import files
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import (
@@ -85,7 +86,8 @@ class GlyphIcon(QWidget):
                 painter.drawLine(left_i + 6, y, right_i - 6, y)
 
 
-def app_icon() -> QIcon:
+def _painted_icon() -> QIcon:
+    """Fallback icon if the packaged PNG asset is unavailable."""
     pixmap = QPixmap(64, 64)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
@@ -98,6 +100,18 @@ def app_icon() -> QIcon:
     painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "d2u")
     painter.end()
     return QIcon(pixmap)
+
+
+def app_icon() -> QIcon:
+    """Application/window icon from ``assets/df2ulog.png`` (or a painted fallback)."""
+    try:
+        data = files("df2ulog.gui").joinpath("assets", "df2ulog.png").read_bytes()
+        pixmap = QPixmap()
+        if pixmap.loadFromData(data, "PNG") and not pixmap.isNull():
+            return QIcon(pixmap)
+    except (OSError, ValueError):
+        pass
+    return _painted_icon()
 
 
 def _row(label: str, value: str, *, value_color: str = "#e6edf5") -> str:

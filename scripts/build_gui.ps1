@@ -28,6 +28,8 @@ Write-Host "=== PyInstaller build (onedir) ==="
     --collect-all pymavlink `
     --collect-all pyulog `
     --hidden-import pymavlink.DFReader `
+    --icon "$R\src\df2ulog\gui\assets\df2ulog.ico" `
+    --add-data "$R\src\df2ulog\gui\assets;df2ulog/gui/assets" `
     --paths "$R\src" `
     "$R\packaging\gui_launcher.py"
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller build failed: exit $LASTEXITCODE" }
