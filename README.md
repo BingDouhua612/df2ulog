@@ -3,6 +3,8 @@
 [![CI](https://github.com/BingDouhua612/df2ulog/actions/workflows/ci.yml/badge.svg)](https://github.com/BingDouhua612/df2ulog/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+**简体中文** · [English](README.en.md)
+
 把 ArduPilot DataFlash 日志（`.BIN` / Mission Planner `.log`）转成 **PX4 ULog**（`.ulg`），可直接用 PlotJuggler 分析、用 `pyulog` 回读。提供 CLI 和 Windows GUI（支持批量转换）。
 
 ![GUI 批量转换](docs/images/gui-result.png)
@@ -28,7 +30,7 @@ df2ulog verify out/flight.ulg --source logs/flight.BIN
 常用参数：`-o/--output`、`--force`、`--verify`、`--report/--report-json`、`--strict`、`--allow-time-reset`。
 退出码：`0` 成功 / `3` 输入无效 / `4` 转换失败 / `5` verify 失败 / `6` 输出已存在。
 
-**GUI**：运行 `df2ulog-gui`，把多个日志拖入窗口 → "开始批量转换"。支持取消、已存在默认跳过、逐文件状态/耗时与汇总。
+**GUI**：运行 `df2ulog-gui`，把多个日志拖入窗口 → "开始批量转换"。支持取消、已存在默认跳过、逐文件状态/耗时与汇总；右上角 **EN / 中文** 可切换界面语言（会记住选择）。
 
 ## 文档
 

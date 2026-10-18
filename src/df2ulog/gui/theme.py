@@ -91,6 +91,16 @@ QPushButton#Primary {
 QPushButton#Primary:hover { background-color: #5cc8fa; }
 QPushButton#Primary:pressed { background-color: #2b9fe0; }
 QPushButton#Primary:disabled { background-color: #1f3a49; color: #5f7d8f; }
+QPushButton#LangSwitch {
+    background-color: #1a2129;
+    color: #9fb0c3;
+    border: 1px solid #31404f;
+    border-radius: 13px;
+    padding: 4px 12px;
+    font-size: 9pt;
+    min-width: 40px;
+}
+QPushButton#LangSwitch:hover { color: #38bdf8; border-color: #38bdf8; }
 QPushButton#Link {
     background: transparent;
     border: none;

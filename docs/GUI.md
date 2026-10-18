@@ -24,6 +24,10 @@ df2ulog-gui            # 或：python -m df2ulog.gui
 - 中文字体 `Microsoft YaHei UI`，高 DPI 自适应；布局按 1080p/150% 缩放下 820×720 逻辑像素调优，关键信息无需滚动。
 - 无外部图片资源依赖（图标均 QPainter 矢量绘制，打包无额外素材）。
 
+## 界面语言
+
+右上角 **EN / 中文** 按钮一键切换中英文界面；选择通过 `QSettings` 记住，下次启动保持上次语言（默认中文）。
+
 ## 界面与操作（批量转换）
 
 ![批量队列](images/gui-selected.png)

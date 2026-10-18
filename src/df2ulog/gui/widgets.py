@@ -16,6 +16,8 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QWidget
 
+from .i18n import LANG_ZH, normalize_lang, tr
+
 
 class GlyphIcon(QWidget):
     """Vector icon painted in the accent color (avoids emoji/font fallback issues)."""
@@ -107,62 +109,74 @@ def _row(label: str, value: str, *, value_color: str = "#e6edf5") -> str:
     )
 
 
-def result_html(outcome) -> str:
+def result_html(outcome, lang: str = LANG_ZH) -> str:
     """Render a ConversionOutcome as a compact, styled HTML summary."""
+    lang = normalize_lang(lang)
     parts: list[str] = [
         '<div style="font-size:9pt; line-height:130%; color:#c9d4e0;">'
     ]
     if outcome.output_path is not None:
-        parts.append(_row("输出文件", html.escape(str(outcome.output_path))))
+        parts.append(
+            _row(
+                tr("result.output_file", lang),
+                html.escape(str(outcome.output_path)),
+            )
+        )
     result = outcome.result
     if result is not None:
         df_types = len({plan.df_type_id for plan in result.topics})
+        if lang == LANG_ZH:
+            topic_value = (
+                f"{len(result.topics)}（{df_types} 个 DF 类型） · "
+                f"{result.data_record_count:,} 条"
+            )
+        else:
+            topic_value = (
+                f"{len(result.topics)} ({df_types} DF types) · "
+                f"{result.data_record_count:,} rec"
+            )
         parts.extend(
             [
+                _row(tr("result.topic_record", lang), topic_value),
                 _row(
-                    "topic / 记录",
-                    f"{len(result.topics)}（{df_types} 个 DF 类型） · "
-                    f"{result.data_record_count:,} 条",
-                ),
-                _row(
-                    "参数 / 日志 / Info",
+                    tr("result.params_logs_info", lang),
                     f"{result.params_written} / {result.logging_records} / "
                     f"{result.info_records}",
                 ),
                 _row(
-                    "大小 / 耗时",
+                    tr("result.size_elapsed", lang),
                     f"{result.output_size:,} B · {result.elapsed_s:.2f} s",
                 ),
                 _row(
-                    "输出 SHA256",
+                    tr("result.sha256", lang),
                     '<span style="font-family:Consolas, monospace; color:#8ab4f8;">'
                     f"{html.escape(result.output_sha256)}</span>",
                 ),
                 _row(
-                    "固件 / 机架",
+                    tr("result.firmware_frame", lang),
                     f"{html.escape(result.firmware or '-')} · "
                     f"{html.escape(result.frame or '-')}",
                 ),
-                _row("GPS UTC", html.escape(result.gps_utc or "-")),
+                _row(tr("result.gps_utc", lang), html.escape(result.gps_utc or "-")),
             ]
         )
         if result.source_tail_bytes:
             parts.append(
                 _row(
-                    "源文件尾部",
-                    f"{result.source_tail_bytes} B 不完整（已告警，未静默丢数据）",
+                    tr("result.source_tail", lang),
+                    tr("result.source_tail_warn", lang, bytes=result.source_tail_bytes),
                     value_color="#fbbf24",
                 )
             )
     if outcome.verify_ok is True:
         parts.append(
             '<div style="margin-top:6px; color:#34d399; font-weight:600;">'
-            "verify：PASS</div>"
+            f"{tr('result.verify_pass', lang)}</div>"
         )
     elif outcome.verify_ok is False:
         parts.append(
             '<div style="margin-top:6px; color:#f87171; font-weight:600;">'
-            "verify：FAIL</div>"
+            f"{tr('result.verify_fail', lang)}</div>"
         )
         for failure in outcome.verify_failures:
             parts.append(
@@ -172,32 +186,44 @@ def result_html(outcome) -> str:
     return "".join(parts)
 
 
-def batch_summary_html(outcome) -> str:
+def batch_summary_html(outcome, lang: str = LANG_ZH) -> str:
     """Render a batch conversion summary (success/skipped/failed/cancelled)."""
+    lang = normalize_lang(lang)
     total = len(outcome.items)
-    cancelled = "（已取消）" if outcome.cancelled else ""
+    cancelled_suffix = "（已取消）" if lang == LANG_ZH else " (cancelled)"
+    separator = "：" if lang == LANG_ZH else ": "
     parts: list[str] = [
         '<div style="font-size:9.5pt; line-height:140%; color:#c9d4e0;">',
-        f'<div style="margin:0 0 5px 0;">共 {total} 个文件{cancelled}</div>',
-        _row("成功", str(outcome.success_count), value_color="#34d399"),
-        _row("跳过", str(outcome.skipped_count), value_color="#fbbf24"),
-        _row("失败", str(outcome.failed_count), value_color="#f87171"),
+        (
+            f'<div style="margin:0 0 5px 0;">'
+            f"{tr('summary.files', lang, count=total)}"
+            f"{cancelled_suffix if outcome.cancelled else ''}</div>"
+        ),
+        _row(tr("summary.success", lang), str(outcome.success_count), value_color="#34d399"),
+        _row(tr("summary.skipped", lang), str(outcome.skipped_count), value_color="#fbbf24"),
+        _row(tr("summary.failed", lang), str(outcome.failed_count), value_color="#f87171"),
     ]
     if outcome.cancelled_count:
         parts.append(
-            _row("已取消", str(outcome.cancelled_count), value_color="#9fb0c3")
+            _row(
+                tr("summary.cancelled", lang),
+                str(outcome.cancelled_count),
+                value_color="#9fb0c3",
+            )
         )
     failures = [item for item in outcome.items if item.status == "failed"]
     for item in failures[:5]:
         parts.append(
             '<div style="color:#f87171; margin-top:3px;">✕ '
-            f"{html.escape(item.source.name)}：{html.escape(item.message[:180])}</div>"
+            f"{html.escape(item.source.name)}{separator}"
+            f"{html.escape(item.message[:180])}</div>"
         )
     skipped = [item for item in outcome.items if item.status == "skipped"][:5]
     for item in skipped:
         parts.append(
             '<div style="color:#fbbf24; margin-top:2px;">– '
-            f"{html.escape(item.source.name)}：{html.escape(item.message[:160])}</div>"
+            f"{html.escape(item.source.name)}{separator}"
+            f"{html.escape(item.message[:160])}</div>"
         )
     parts.append("</div>")
     return "".join(parts)
