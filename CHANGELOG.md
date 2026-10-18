@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.1] - 2026-10-18
 
 ### Added
 
@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bilingual README (`README.md` / `README.en.md`).
 - Hand-drawn `.bin/.log to ulog` app icon (window icon + packaged exe icon,
   multi-resolution `.ico`).
+- Windows `onedir` build published as a Release asset
+  (`df2ulog-gui-*-win64.zip`, no Python required).
 
 ## [0.1.0] - 2026-10-18
 
@@ -43,4 +45,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   verifier tests, GUI tests (offscreen), plus optional real-log acceptance
   tests enabled through `DF2ULOG_REAL_LOGS_FILE`.
 
+[0.1.1]: https://github.com/BingDouhua612/df2ulog/releases/tag/v0.1.1
 [0.1.0]: https://github.com/BingDouhua612/df2ulog/releases/tag/v0.1.0

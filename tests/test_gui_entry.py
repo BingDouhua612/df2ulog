@@ -2,6 +2,8 @@ import subprocess
 import sys
 import textwrap
 
+import df2ulog
+
 
 def run_module(*args, cwd=None):
     return subprocess.run(
@@ -17,7 +19,7 @@ def run_module(*args, cwd=None):
 def test_version_headless():
     r = run_module("--version")
     assert r.returncode == 0, r.stderr
-    assert "0.1.0" in r.stdout
+    assert df2ulog.__version__ in r.stdout
 
 
 def test_headless_import_does_not_import_qt():

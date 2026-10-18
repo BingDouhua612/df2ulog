@@ -18,6 +18,8 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -e ".[verify]"                          # GUI: pip install -e ".[gui]"
 ```
 
+**Windows (no Python)**: download `df2ulog-gui-*-win64.zip` from [Releases](https://github.com/BingDouhua612/df2ulog/releases), unzip and run `df2ulog-gui.exe`.
+
 ## Usage
 
 ```bash

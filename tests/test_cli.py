@@ -5,6 +5,8 @@ import sys
 import pyulog
 from fixtures.make_fixtures import make_minimal_fixture
 
+import df2ulog
+
 
 def run(*args, cwd=None):
     return subprocess.run(
@@ -20,7 +22,7 @@ def run(*args, cwd=None):
 def test_help_and_version():
     assert run("--help").returncode == 0
     r = run("--version")
-    assert r.returncode == 0 and "0.1.0" in r.stdout
+    assert r.returncode == 0 and df2ulog.__version__ in r.stdout
 
 
 def test_convert_verify_inspect(tmp_path):

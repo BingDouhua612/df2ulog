@@ -8,7 +8,7 @@ import df2ulog
 
 
 def test_version():
-    assert df2ulog.__version__ == "0.1.0"
+    assert df2ulog.__version__.count(".") == 2
 
 
 def test_pymavlink_surface():
@@ -29,4 +29,4 @@ def test_module_version_cli():
         text=True,
         encoding="utf-8",
     )
-    assert r.returncode == 0 and "0.1.0" in r.stdout
+    assert r.returncode == 0 and df2ulog.__version__ in r.stdout

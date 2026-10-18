@@ -2,6 +2,7 @@ import json
 
 from fixtures.make_fixtures import make_minimal_fixture
 
+from df2ulog import __version__
 from df2ulog.converter import ConversionOptions, convert_file
 from df2ulog.reports import (
     REPORT_SCHEMA_VERSION,
@@ -23,7 +24,7 @@ def test_json_report_schema(tmp_path):
     report = build_json_report(res)
     assert report["schema_version"] == REPORT_SCHEMA_VERSION == 1
     assert report["tool"]["name"] == "df2ulog"
-    assert report["tool"]["version"] == "0.1.0"
+    assert report["tool"]["version"] == __version__
     assert report["source"]["format"] == "binary"
     assert report["source"]["size"] > 0
     assert report["output"]["size"] > 0
