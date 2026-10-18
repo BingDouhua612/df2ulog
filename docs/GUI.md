@@ -1,6 +1,6 @@
 # df2ulog 图形界面（GUI）
 
-> 内核与 CLI 完全相同（同一份 `.ulg` 字节）；验收方式见 [acceptance.md](acceptance.md)。
+> 内核与 CLI 完全相同（同一份 `.ulg` 字节）；测试说明见 [CONTRIBUTING.md](../CONTRIBUTING.md)。
 
 ## 启动
 
@@ -87,4 +87,4 @@ df2ulog-gui            # 或：python -m df2ulog.gui
 
 1. `ruff check src tests`、`pytest -q -m "not real"` 通过。
 2. 本机执行 `scripts/build_gui.ps1 -SmokeLog <本地日志>` 并保留输出。
-3. 人工验收清单见 [acceptance.md](acceptance.md)。
+3. 测试与贡献说明见 [CONTRIBUTING.md](../CONTRIBUTING.md)。

@@ -34,7 +34,7 @@ df2ulog verify out/flight.ulg --source logs/flight.BIN
 
 - [GUI 使用与打包](docs/GUI.md)
 - [格式说明](docs/FORMAT-NOTES.md) · [字段映射](docs/MAPPING.md)
-- [设计决策](docs/DECISIONS.md) · [验收记录](docs/acceptance.md)
+- [设计决策](docs/DECISIONS.md)
 
 ## 开发
 

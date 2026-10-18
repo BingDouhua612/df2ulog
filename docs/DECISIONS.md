@@ -45,7 +45,7 @@
 - 生效范围（本项目内，不改计划文件本身，计划文件按纪律保持原样）：
   - Task 6 Step 5 门禁按 `F 55 / A 99 / D 227,905 / P 1,266 / L 27 / INFO 11 / lint PASS / corrupt False` **判定通过**；
   - Task 9 文本锚点同类修正：**99 topic / 227,906 D / 1,266 P / 27 L**；
-  - Task 10 `tests/test_real_logs.py`、`docs/acceptance.md` 与最终报告使用 **99**；
+  - Task 10 `tests/test_real_logs.py` 与最终报告使用 **99**；
   - PlotJuggler 人工清单中 `MAV` 曲线名为 `MAV.00/…`、`MAV.02/…`、`MAV.03/…`（其余单实例类型仍无后缀）。
 - 未采纳 B；`MAV` 不得合并实例、不得丢弃 chan 2/3 数据。
 
