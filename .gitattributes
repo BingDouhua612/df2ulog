@@ -1,0 +1,17 @@
+# Normalize text files on checkout/commit (Windows + Linux CI friendly).
+* text=auto
+
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.toml text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+
+# Binary assets.
+*.png binary
+*.BIN binary
+*.bin binary
+*.ulg binary
+*.log binary

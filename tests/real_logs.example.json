@@ -1,0 +1,7 @@
+{
+  "_comment": "Copy to tests/real_logs.local.json (git-ignored) or point DF2ULOG_REAL_LOGS_FILE at a JSON file with this shape. Paths are local only and are never committed.",
+  "bin_ref": "D:/logs/flight_01.BIN",
+  "log_ref": "D:/logs/flight_01.log",
+  "bin_a": "D:/logs/flight_02.BIN",
+  "log_a": "D:/logs/flight_02.log"
+}

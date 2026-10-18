@@ -1,0 +1,64 @@
+name: Bug report
+description: Something is broken or produces an invalid .ulg file
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report! Please do **not** attach real flight logs,
+        personal paths or other private data. Use the synthetic fixtures in
+        `tests/fixtures/` or a minimized, sanitized reproducer instead.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI
+        - GUI
+        - Packaging (PyInstaller)
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Actual behavior, error messages, exit code.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Commands, fixture name, and the smallest input that reproduces it.
+      placeholder: |
+        df2ulog tests/... -o out/... -v
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: df2ulog version / commit
+      placeholder: "0.1.0 (f25dee6)"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "Windows 11, Python 3.12.10, pymavlink 2.4.50"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized output (optional)
+      description: Remove personal paths, file names and log contents before pasting.

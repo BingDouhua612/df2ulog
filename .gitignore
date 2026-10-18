@@ -1,0 +1,25 @@
+.venv/
+out/
+build/
+dist/
+*.spec
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.egg-info/
+*.part
+.vscode/
+.idea/
+
+# Local/private material: never commit real logs, local acceptance records or
+# internal notes (these are ignored in a public repository).
+private/
+tests/real_logs.local.json
+docs/private/
+
+# Test/coverage artifacts.
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.DS_Store

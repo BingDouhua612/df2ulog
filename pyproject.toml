@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "df2ulog"
+version = "0.1.0"
+description = "Convert ArduPilot DataFlash logs (.BIN/.log) to PX4 ULog (.ulg)"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "BingDouhua612" }]
+keywords = [
+    "ardupilot",
+    "dataflash",
+    "ulog",
+    "px4",
+    "plotjuggler",
+    "flight-log",
+    "log-converter",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = ["pymavlink>=2.4.49,<2.5"]
+
+[project.optional-dependencies]
+verify = ["pyulog>=1.2.4,<2"]
+gui = ["PySide6>=6.6,<7"]
+gui-dev = ["PySide6>=6.6,<7", "pytest-qt>=4.4", "pyinstaller>=6.6,<7"]
+dev = ["pyulog>=1.2.4,<2", "pytest>=8", "ruff>=0.5"]
+
+[project.urls]
+Homepage = "https://github.com/BingDouhua612/df2ulog"
+Repository = "https://github.com/BingDouhua612/df2ulog"
+Issues = "https://github.com/BingDouhua612/df2ulog/issues"
+Changelog = "https://github.com/BingDouhua612/df2ulog/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/BingDouhua612/df2ulog/tree/main/docs"
+
+[project.scripts]
+df2ulog = "df2ulog.cli:main"
+df2ulog-gui = "df2ulog.gui.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+markers = [
+    "real: requires local flight logs; set DF2ULOG_REAL_LOGS_FILE or create tests/real_logs.local.json",
+]
+addopts = "-ra"

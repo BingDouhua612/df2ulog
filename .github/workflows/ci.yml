@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check src tests
+      - name: Tests (synthetic fixtures)
+        run: python -m pytest -q -m "not real"
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+  gui:
+    name: gui (windows, py3.12)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install GUI test dependencies
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e ".[dev]" PySide6 pytest-qt
+      - name: GUI tests (offscreen)
+        run: python -m pytest tests/test_gui_entry.py tests/test_gui_backend.py tests/test_gui_batch.py tests/test_gui_app.py -q
+        env:
+          QT_QPA_PLATFORM: offscreen
