@@ -1,9 +1,15 @@
-# df2ulog
+<p align="center">
+  <img src="docs/images/df2ulog-icon.png" width="200" alt="df2ulog logo">
+</p>
 
-[![CI](https://github.com/BingDouhua612/df2ulog/actions/workflows/ci.yml/badge.svg)](https://github.com/BingDouhua612/df2ulog/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<h1 align="center">df2ulog</h1>
 
-**简体中文** · [English](README.en.md)
+<p align="center">
+  <a href="https://github.com/BingDouhua612/df2ulog/actions/workflows/ci.yml"><img src="https://github.com/BingDouhua612/df2ulog/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
+
+<p align="center"><b>简体中文</b> · <a href="README.en.md">English</a></p>
 
 把 ArduPilot DataFlash 日志（`.BIN` / Mission Planner `.log`）转成 **PX4 ULog**（`.ulg`），可直接用 PlotJuggler 分析、用 `pyulog` 回读。提供 CLI 和 Windows GUI（支持批量转换）。
 
