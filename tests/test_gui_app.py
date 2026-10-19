@@ -9,10 +9,25 @@ import pytest
 pytest.importorskip("PySide6")
 
 from fixtures.make_fixtures import make_minimal_fixture
+from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import QApplication
 
 from df2ulog.converter import ConversionOptions, convert_file
 from df2ulog.gui.app import MainWindow
+
+
+@pytest.fixture(autouse=True)
+def _clean_gui_settings():
+    settings = QSettings("df2ulog", "df2ulog-gui")
+    for key in ("default_output_dir", "last_output_dir"):
+        settings.remove(key)
+    settings.sync()
+    yield
+    for key in ("default_output_dir", "last_output_dir"):
+        settings.remove(key)
+    settings.sync()
+
+
 from df2ulog.gui.backend import (
     BatchItemResult,
     BatchOutcome,
@@ -201,3 +216,23 @@ def test_app_icon_loaded(qapp):
     icon = app_icon()
     assert not icon.isNull()
     assert icon.availableSizes()
+
+
+def test_default_output_dir(qapp, tmp_path):
+    settings = QSettings("df2ulog", "df2ulog-gui")
+    out_dir = tmp_path / "default_out"
+
+    window = MainWindow()
+    window.output_dir_edit.setText(str(out_dir))
+    window.set_default_button.click()          # check -> save default
+    assert window.set_default_button.isChecked()
+    assert settings.value("default_output_dir") == str(out_dir)
+    window.close()
+
+    window2 = MainWindow()                     # startup should prefill the default
+    assert window2.output_dir_edit.text() == str(out_dir)
+    assert window2.set_default_button.isChecked()
+    window2.set_default_button.click()         # uncheck -> clear default
+    assert not window2.set_default_button.isChecked()
+    assert not settings.value("default_output_dir")
+    window2.close()

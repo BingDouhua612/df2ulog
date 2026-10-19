@@ -38,7 +38,7 @@ df2ulog verify out/flight.ulg --source logs/flight.BIN
 常用参数：`-o/--output`、`--force`、`--verify`、`--report/--report-json`、`--strict`、`--allow-time-reset`。
 退出码：`0` 成功 / `3` 输入无效 / `4` 转换失败 / `5` verify 失败 / `6` 输出已存在。
 
-**GUI**：运行 `df2ulog-gui`，把多个日志拖入窗口 → "开始批量转换"。支持取消、已存在默认跳过、逐文件状态/耗时与汇总；右上角 **EN / 中文** 可切换界面语言（会记住选择）。
+**GUI**：运行 `df2ulog-gui`，把多个日志拖入窗口 → "开始批量转换"。支持取消、已存在默认跳过、逐文件状态/耗时与汇总；右上角 **EN / 中文** 可切换界面语言（会记住选择）；输出目录可点 **「设为默认」** 固定为每次启动的默认目录。
 
 ## 文档
 

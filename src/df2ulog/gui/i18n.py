@@ -99,6 +99,11 @@ _ZH: dict[str, str] = {
     "result.single_output": "输出：{path}",
     "result.single_topic": "topic：{count}",
     "result.single_records": "数据记录：{count:,}",
+    "button.set_default": "设为默认",
+    "button.set_default.tip": "把当前输出目录设为每次启动的默认目录；再次点击取消",
+    "status.default_saved": "已设为默认输出目录：{path}",
+    "status.default_cleared": "已清除默认输出目录（将使用各文件所在目录）",
+    "status.default_need_dir": "请先选择或填写一个输出目录",
 }
 
 _EN: dict[str, str] = {
@@ -189,6 +194,11 @@ _EN: dict[str, str] = {
     "result.single_output": "Output: {path}",
     "result.single_topic": "topics: {count}",
     "result.single_records": "data records: {count:,}",
+    "button.set_default": "Set default",
+    "button.set_default.tip": "Use the current output dir as the default on every launch; click again to clear",
+    "status.default_saved": "Default output directory set: {path}",
+    "status.default_cleared": "Default output directory cleared (files go next to their sources)",
+    "status.default_need_dir": "Choose or type an output directory first",
 }
 
 STRINGS: dict[str, dict[str, str]] = {LANG_ZH: _ZH, LANG_EN: _EN}

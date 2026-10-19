@@ -213,6 +213,7 @@ class MainWindow(QMainWindow):
         self.queue_table.setHorizontalHeaderLabels([self._t(key) for key in _COLUMN_KEYS])
         self.lang_button.setText(self._lang_button_text())
         self.lang_button.setToolTip(self._t("lang.tip"))
+        self.set_default_button.setToolTip(self._t("button.set_default.tip"))
         self._refresh_queue()
         if self._last_batch_outcome is not None:
             self.result_text.setHtml(batch_summary_html(self._last_batch_outcome, self._lang))
@@ -393,9 +394,14 @@ class MainWindow(QMainWindow):
         self.output_dir_edit.textChanged.connect(self._update_output_preview)
         self.output_dir_button = self._button("output.browse")
         self.output_dir_button.clicked.connect(self._choose_output_dir)
+        self.set_default_button = self._button("button.set_default")
+        self.set_default_button.setCheckable(True)
+        self.set_default_button.setToolTip(self._t("button.set_default.tip"))
+        self.set_default_button.clicked.connect(self._toggle_default_dir)
         dir_row.addWidget(dir_label)
         dir_row.addWidget(self.output_dir_edit, stretch=1)
         dir_row.addWidget(self.output_dir_button)
+        dir_row.addWidget(self.set_default_button)
         layout.addLayout(dir_row)
 
         self.output_preview_label = QLabel("")
@@ -510,6 +516,19 @@ class MainWindow(QMainWindow):
         )
         if directory:
             self.output_dir_edit.setText(directory)
+
+    def _toggle_default_dir(self) -> None:
+        if self.set_default_button.isChecked():
+            directory = self.output_dir_edit.text().strip()
+            if not directory:
+                self.set_default_button.setChecked(False)
+                self._set_status("status.default_need_dir")
+                return
+            self._settings.setValue("default_output_dir", directory)
+            self._set_status("status.default_saved", path=directory)
+        else:
+            self._settings.remove("default_output_dir")
+            self._set_status("status.default_cleared")
 
     def _remove_selected(self) -> None:
         if self._busy:
@@ -868,8 +887,12 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, title, text)
 
     def _restore_settings(self) -> None:
+        default = str(self._settings.value("default_output_dir", "") or "")
         last = str(self._settings.value("last_output_dir", "") or "")
-        if last:
+        if default:
+            self.output_dir_edit.setText(default)
+            self.set_default_button.setChecked(True)
+        elif last:
             self.output_dir_edit.setText(last)
         self._update_output_preview()
 
