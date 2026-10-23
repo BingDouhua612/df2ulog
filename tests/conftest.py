@@ -17,6 +17,8 @@ import json
 import os
 from pathlib import Path
 
+import pytest
+
 
 def _load_real_logs() -> dict[str, Path]:
     candidates: list[Path] = []
@@ -38,3 +40,9 @@ def _load_real_logs() -> dict[str, Path]:
 
 
 REAL_LOGS: dict[str, Path] = _load_real_logs()
+
+
+@pytest.fixture(autouse=True)
+def _isolate_gui_settings(monkeypatch):
+    """Never let GUI tests write into the user's real QSettings."""
+    monkeypatch.setenv("DF2ULOG_GUI_SETTINGS_APP", "df2ulog-gui-tests")

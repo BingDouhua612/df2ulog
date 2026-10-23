@@ -6,15 +6,13 @@ import pytest
 
 pytest.importorskip("PySide6")
 
-from PySide6.QtCore import QSettings
-
-from df2ulog.gui.app import MainWindow
+from df2ulog.gui.app import MainWindow, gui_settings
 from df2ulog.gui.i18n import LANG_EN, LANG_ZH, STRINGS, tr
 
 
 @pytest.fixture(autouse=True)
 def _reset_language():
-    settings = QSettings("df2ulog", "df2ulog-gui")
+    settings = gui_settings()
     settings.setValue("language", LANG_ZH)
     settings.sync()
     yield
@@ -58,7 +56,7 @@ def test_language_persisted(qapp):
     window._toggle_language()
     window.close()
 
-    settings = QSettings("df2ulog", "df2ulog-gui")
+    settings = gui_settings()
     assert settings.value("language") == LANG_EN
 
     window2 = MainWindow()

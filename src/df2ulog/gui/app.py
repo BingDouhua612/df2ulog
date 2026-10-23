@@ -39,6 +39,14 @@ from PySide6.QtWidgets import (
 )
 
 from .. import __version__
+
+
+def gui_settings() -> QSettings:
+    """QSettings scoped per app; tests override the scope via env."""
+    app_name = os.environ.get("DF2ULOG_GUI_SETTINGS_APP", "df2ulog-gui")
+    return QSettings("df2ulog", app_name)
+
+
 from .backend import (
     BatchItemResult,
     BatchOutcome,
@@ -118,7 +126,7 @@ class _BatchTask(QRunnable):
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self._settings = QSettings("df2ulog", "df2ulog-gui")
+        self._settings = gui_settings()
         self._lang = normalize_lang(self._settings.value("language", LANG_ZH))
         self._i18n_labels: dict[str, QLabel] = {}
         self._i18n_buttons: dict[str, QWidget] = {}
@@ -922,6 +930,10 @@ class MainWindow(QMainWindow):
     def _restore_settings(self) -> None:
         default = str(self._settings.value("default_output_dir", "") or "")
         last = str(self._settings.value("last_output_dir", "") or "")
+        # Ignore a stale last-used path (e.g. temp dirs from tests or deleted folders).
+        if last and not Path(last).is_dir():
+            self._settings.remove("last_output_dir")
+            last = ""
         if default:
             self.output_dir_edit.setText(default)
             self.set_default_button.setChecked(True)

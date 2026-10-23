@@ -9,16 +9,15 @@ import pytest
 pytest.importorskip("PySide6")
 
 from fixtures.make_fixtures import make_minimal_fixture
-from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import QApplication
 
 from df2ulog.converter import ConversionOptions, convert_file
-from df2ulog.gui.app import MainWindow
+from df2ulog.gui.app import MainWindow, gui_settings
 
 
 @pytest.fixture(autouse=True)
 def _clean_gui_settings():
-    settings = QSettings("df2ulog", "df2ulog-gui")
+    settings = gui_settings()
     for key in ("default_output_dir", "last_output_dir"):
         settings.remove(key)
     settings.sync()
@@ -219,7 +218,7 @@ def test_app_icon_loaded(qapp):
 
 
 def test_default_output_dir(qapp, tmp_path):
-    settings = QSettings("df2ulog", "df2ulog-gui")
+    settings = gui_settings()
     out_dir = tmp_path / "default_out"
 
     window = MainWindow()
@@ -236,3 +235,23 @@ def test_default_output_dir(qapp, tmp_path):
     assert not window2.set_default_button.isChecked()
     assert not settings.value("default_output_dir")
     window2.close()
+
+
+def test_gui_settings_isolated(qapp):
+    from df2ulog.gui.app import gui_settings
+
+    assert gui_settings().applicationName() == "df2ulog-gui-tests"
+
+
+def test_restore_ignores_missing_last_dir(qapp, tmp_path):
+    from df2ulog.gui.app import gui_settings
+
+    settings = gui_settings()
+    missing = tmp_path / "gone"
+    settings.setValue("last_output_dir", str(missing))
+    settings.sync()
+
+    window = MainWindow()
+    assert window.output_dir_edit.text() == ""
+    assert settings.value("last_output_dir") in (None, "")
+    window.close()
