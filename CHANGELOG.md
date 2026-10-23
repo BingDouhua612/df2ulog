@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2026-10-23
+
+### Added
+
+- GUI: standalone **Parameters** tab: drop a log to scan PARM records only
+  (no `.ulg` conversion), switch between several files and copy rows.
+
+### Fixed
+
+- GUI: test runs no longer write into the real `QSettings`, and a stale
+  `last_output_dir` (e.g. a removed temp directory) is ignored on startup.
+
 ## [0.1.3] - 2026-10-23
 
 ### Added
@@ -12,8 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GUI: parameter table dialog showing every PARM change (name / value /
   time), with search, multi-select and copy-to-clipboard; `ConversionResult`
   now carries `param_changes` (additive, backward compatible).
-- GUI: standalone **Parameters** tab: drop a log to scan PARM records only
-  (no `.ulg` conversion), switch between several files and copy rows.
 
 ## [0.1.2] - 2026-10-19
 
@@ -62,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   verifier tests, GUI tests (offscreen), plus optional real-log acceptance
   tests enabled through `DF2ULOG_REAL_LOGS_FILE`.
 
+[0.1.4]: https://github.com/BingDouhua612/df2ulog/releases/tag/v0.1.4
 [0.1.3]: https://github.com/BingDouhua612/df2ulog/releases/tag/v0.1.3
 [0.1.2]: https://github.com/BingDouhua612/df2ulog/releases/tag/v0.1.2
 [0.1.1]: https://github.com/BingDouhua612/df2ulog/releases/tag/v0.1.1
