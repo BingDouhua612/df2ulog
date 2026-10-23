@@ -104,6 +104,19 @@ _ZH: dict[str, str] = {
     "status.default_saved": "已设为默认输出目录：{path}",
     "status.default_cleared": "已清除默认输出目录（将使用各文件所在目录）",
     "status.default_need_dir": "请先选择或填写一个输出目录",
+    "button.params": "参数表…",
+    "button.params.tip": "查看日志中提取的全部参数变更记录",
+    "params.title": "参数表",
+    "params.file": "文件",
+    "params.search": "搜索参数名或数值…",
+    "params.col.index": "序号",
+    "params.col.name": "参数名",
+    "params.col.value": "值",
+    "params.col.time": "时间(秒)",
+    "params.count": "{records} 条记录 · {names} 个参数",
+    "params.empty": "该日志没有 PARM 参数记录",
+    "params.copy": "复制全部",
+    "params.close": "关闭",
 }
 
 _EN: dict[str, str] = {
@@ -199,6 +212,19 @@ _EN: dict[str, str] = {
     "status.default_saved": "Default output directory set: {path}",
     "status.default_cleared": "Default output directory cleared (files go next to their sources)",
     "status.default_need_dir": "Choose or type an output directory first",
+    "button.params": "Parameters…",
+    "button.params.tip": "Show all parameter changes extracted from the log",
+    "params.title": "Parameter table",
+    "params.file": "File",
+    "params.search": "Search parameter name or value…",
+    "params.col.index": "#",
+    "params.col.name": "Parameter",
+    "params.col.value": "Value",
+    "params.col.time": "Time (s)",
+    "params.count": "{records} records · {names} parameters",
+    "params.empty": "No PARM records in this log",
+    "params.copy": "Copy all",
+    "params.close": "Close",
 }
 
 STRINGS: dict[str, dict[str, str]] = {LANG_ZH: _ZH, LANG_EN: _EN}

@@ -49,6 +49,7 @@ from .backend import (
     run_batch,
 )
 from .i18n import LANG_EN, LANG_ZH, normalize_lang, tr
+from .params_view import ParamTableDialog
 from .theme import apply_theme
 from .widgets import GlyphIcon, app_icon, batch_summary_html, result_html
 
@@ -214,6 +215,7 @@ class MainWindow(QMainWindow):
         self.lang_button.setText(self._lang_button_text())
         self.lang_button.setToolTip(self._t("lang.tip"))
         self.set_default_button.setToolTip(self._t("button.set_default.tip"))
+        self.params_button.setToolTip(self._t("button.params.tip"))
         self._refresh_queue()
         if self._last_batch_outcome is not None:
             self.result_text.setHtml(batch_summary_html(self._last_batch_outcome, self._lang))
@@ -351,10 +353,18 @@ class MainWindow(QMainWindow):
         result_layout.addWidget(self.result_text, stretch=1)
         root.addWidget(result_card, stretch=2)
 
+        bottom_row = QHBoxLayout()
+        bottom_row.setSpacing(8)
         self.open_folder_button = self._button("button.open_folder")
         self.open_folder_button.setEnabled(False)
         self.open_folder_button.clicked.connect(self._open_output_folder)
-        root.addWidget(self.open_folder_button)
+        self.params_button = self._button("button.params")
+        self.params_button.setEnabled(False)
+        self.params_button.setToolTip(self._t("button.params.tip"))
+        self.params_button.clicked.connect(self._show_params_table)
+        bottom_row.addWidget(self.open_folder_button, stretch=1)
+        bottom_row.addWidget(self.params_button)
+        root.addLayout(bottom_row)
 
         self._set_status("status.ready")
 
@@ -606,6 +616,12 @@ class MainWindow(QMainWindow):
             )
 
     def _update_controls(self) -> None:
+        has_params = any(
+            row["result"] is not None
+            and getattr(row["result"], "param_changes", None)
+            for row in self._rows
+        )
+        self.params_button.setEnabled(has_params)
         has_valid = any(row["status"] != "invalid" for row in self._rows)
         self.convert_button.setEnabled(has_valid and not self._busy)
         self.choose_button.setEnabled(not self._busy)
@@ -740,6 +756,7 @@ class MainWindow(QMainWindow):
         if item.output_path is not None and item.output_path.exists():
             self._last_output = item.output_path
             self.open_folder_button.setEnabled(True)
+        self._update_controls()
 
     def _apply_item_result(self, index: int, item: BatchItemResult) -> None:
         if index >= len(self._batch_rows):
@@ -854,6 +871,21 @@ class MainWindow(QMainWindow):
                 code=outcome.error_code,
             ),
         )
+
+    def _show_params_table(self) -> None:
+        files: list[tuple[str, list[tuple[str, float, int]]]] = []
+        for row in self._rows:
+            result = row["result"]
+            if result is None:
+                continue
+            changes = getattr(result, "param_changes", None)
+            if not changes:
+                continue
+            files.append((row["source"].name, list(changes)))
+        if not files:
+            return
+        dialog = ParamTableDialog(self, files, self._lang)
+        dialog.exec()
 
     def _open_output_folder(self) -> None:
         target = self._last_output

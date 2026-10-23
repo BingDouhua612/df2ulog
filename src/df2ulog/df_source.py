@@ -125,6 +125,7 @@ class MetadataScan:
     meta_counts: dict[str, int]
     redefinitions: int
     warnings: list[str] = field(default_factory=list)
+    param_changes: list[tuple[str, float, int]] = field(default_factory=list)
 
 
 @dataclass
@@ -306,6 +307,7 @@ def scan_metadata(
     fmtu: dict[int, tuple[str, str]] = {}
     params: dict[str, float] = {}
     param_conflicts: dict[str, list[float]] = {}
+    param_changes: list[tuple[str, float, int]] = []
     meta_counts: dict[str, int] = {}
     warnings: list[str] = []
     redefinitions = 0
@@ -378,6 +380,11 @@ def scan_metadata(
                 continue
             if not pname:
                 continue
+            try:
+                time_us = int(getattr(msg, "TimeUS", 0) or 0)
+            except (TypeError, ValueError):
+                time_us = 0
+            param_changes.append((pname, value, time_us))
             if pname not in params:
                 params[pname] = value
             elif params[pname] != value:
@@ -453,6 +460,7 @@ def scan_metadata(
         fmtu=fmtu,
         params=params,
         param_conflicts=param_conflicts,
+        param_changes=param_changes,
         firmware=firmware,
         board=board,
         frame=frame,

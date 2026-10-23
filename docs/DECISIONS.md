@@ -59,4 +59,11 @@
   - `.ulg` 字节内容与确定性不变（输出 SHA256 与优化前逐字节一致，由确定性测试覆盖）。
 - 对应实施计划：内部实施计划（未随公开仓库发布）。
 
+## D-05 参数变更记录：为 GUI 参数表追加只读字段（2026-10-23）
 
+- **背景**：GUI 需要展示日志中的全部 PARM 变更记录（用户需求：不要 CSV，做成一张表）。
+- **处理**：
+  - `MetadataScan` 追加 `param_changes: list[tuple[str, float, int]]`（name, value, time_us），带默认值，既有构造调用不受影响；
+  - `ConversionResult` 追加 `param_changes`（`field(default_factory=list)`），仅由 `convert_file` 填充；
+  - 既有 `.ulg` 输出、报告格式、verify 行为均不变（不写 ULog，仅内存数据）。
+- 对应实现：`src/df2ulog/gui/params_view.py`（表格窗口）；测试见 `tests/test_gui_params.py` 与 `tests/test_converter.py::test_param_changes_collected`。

@@ -232,3 +232,18 @@ def test_progress_callback_monotonic(tmp_path):
     phases = {phase for phase, _pct in calls}
     assert {"scan", "planned", "definitions", "write", "done"} <= phases
     assert out.exists()
+
+
+def test_param_changes_collected(tmp_path):
+    fx = make_minimal_fixture(tmp_path)
+    result = convert_file(
+        fx.bin_path, ConversionOptions(output=tmp_path / "params.ulg")
+    )
+    assert result.param_changes
+    names = {name for name, _value, _time_us in result.param_changes}
+    assert names == {"TEST_PARAM", "TEST_PARAM2"}
+    assert all(isinstance(ts, int) and ts >= 0 for _n, _v, ts in result.param_changes)
+    text_result = convert_file(
+        fx.log_path, ConversionOptions(output=tmp_path / "params_text.ulg")
+    )
+    assert {name for name, _value, _time_us in text_result.param_changes} == names

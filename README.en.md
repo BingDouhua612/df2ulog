@@ -38,7 +38,7 @@ df2ulog verify out/flight.ulg --source logs/flight.BIN
 Common options: `-o/--output`, `--force`, `--verify`, `--report/--report-json`, `--strict`, `--allow-time-reset`.
 Exit codes: `0` OK / `3` invalid input / `4` conversion failed / `5` verify failed / `6` output exists.
 
-**GUI**: run `df2ulog-gui`, drop one or more logs, then click "Start batch conversion". Supports cancel-remaining, skip-existing (default) and per-file status/elapsed time with a batch summary. Use the **EN / 中文** button in the top-right to switch the UI language (persisted); the output directory can be pinned as the launch default with **"Set default"**.
+**GUI**: run `df2ulog-gui`, drop one or more logs, then click "Start batch conversion". Supports cancel-remaining, skip-existing (default) and per-file status/elapsed time with a batch summary. Use the **EN / 中文** button in the top-right to switch the UI language (persisted); the output directory can be pinned as the launch default with **"Set default"**; after conversion, **"Parameters…"** shows every parameter change (searchable / copyable).
 
 ## Docs
 

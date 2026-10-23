@@ -106,6 +106,7 @@ class ConversionResult:
     source_tail_bytes: int
     elapsed_s: float
     options: ConversionOptions
+    param_changes: list[tuple[str, float, int]] = field(default_factory=list)
 
 
 @dataclass
@@ -661,6 +662,7 @@ def convert_file(
         board=plan.meta.board,
         frame=plan.meta.frame,
         source_tail_bytes=source_tail_bytes,
+        param_changes=plan.meta.param_changes,
         elapsed_s=time.perf_counter() - started,
         options=options,
     )
