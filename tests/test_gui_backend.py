@@ -99,3 +99,19 @@ def test_run_conversion_unknown_char(tmp_path):
     outcome = run_conversion(ConversionRequest(source=fx.bin_path))
     assert not outcome.ok
     assert outcome.error_code == 4
+
+
+def test_scan_params_without_conversion(tmp_path):
+    from df2ulog.gui.backend import scan_params
+
+    fx = make_minimal_fixture(tmp_path)
+    out = tmp_path / "should_not_exist.ulg"
+    outcome = scan_params(fx.bin_path)
+    assert outcome.ok
+    assert outcome.result is not None
+    assert outcome.result.source_format == "binary"
+    assert [name for name, _v, _t in outcome.result.param_changes] == [
+        "TEST_PARAM",
+        "TEST_PARAM2",
+    ]
+    assert not out.exists()

@@ -32,6 +32,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QTableWidget,
     QTableWidgetItem,
+    QTabWidget,
     QTextEdit,
     QVBoxLayout,
     QWidget,
@@ -49,9 +50,10 @@ from .backend import (
     run_batch,
 )
 from .i18n import LANG_EN, LANG_ZH, normalize_lang, tr
+from .params_page import ParamScanPage
 from .params_view import ParamTableDialog
 from .theme import apply_theme
-from .widgets import GlyphIcon, app_icon, batch_summary_html, result_html
+from .widgets import DropZone, GlyphIcon, app_icon, batch_summary_html, result_html
 
 _ROW_KEYS = {
     "pending": "row.pending",
@@ -111,24 +113,6 @@ class _BatchTask(QRunnable):
             should_cancel=self._cancel_event.is_set,
         )
         self._signals.finished.emit(outcome)
-
-
-class DropZone(QFrame):
-    """Clickable, drag-highlightable drop target."""
-
-    clicked = Signal()
-
-    def __init__(self, parent: QWidget | None = None) -> None:
-        super().__init__(parent)
-        self.setObjectName("DropZone")
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedHeight(76)
-        self.setProperty("dragging", False)
-
-    def mousePressEvent(self, event) -> None:
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.clicked.emit()
-        super().mousePressEvent(event)
 
 
 class MainWindow(QMainWindow):
@@ -216,6 +200,9 @@ class MainWindow(QMainWindow):
         self.lang_button.setToolTip(self._t("lang.tip"))
         self.set_default_button.setToolTip(self._t("button.set_default.tip"))
         self.params_button.setToolTip(self._t("button.params.tip"))
+        self.tabs.setTabText(0, self._t("tab.convert"))
+        self.tabs.setTabText(1, self._t("tab.params"))
+        self.params_page.set_language(self._lang)
         self._refresh_queue()
         if self._last_batch_outcome is not None:
             self.result_text.setHtml(batch_summary_html(self._last_batch_outcome, self._lang))
@@ -233,11 +220,17 @@ class MainWindow(QMainWindow):
     def _build_ui(self) -> None:
         central = QWidget(self)
         self.setCentralWidget(central)
-        root = QVBoxLayout(central)
-        root.setContentsMargins(18, 10, 18, 10)
-        root.setSpacing(6)
+        outer = QVBoxLayout(central)
+        outer.setContentsMargins(18, 10, 18, 10)
+        outer.setSpacing(6)
+        outer.addLayout(self._build_header())
 
-        root.addLayout(self._build_header())
+        self.tabs = QTabWidget()
+        self.tabs.setDocumentMode(True)
+        convert_page = QWidget()
+        root = QVBoxLayout(convert_page)
+        root.setContentsMargins(0, 6, 0, 0)
+        root.setSpacing(6)
 
         self.drop_zone = DropZone()
         self.drop_zone.clicked.connect(self._choose_files)
@@ -368,6 +361,11 @@ class MainWindow(QMainWindow):
 
         self._set_status("status.ready")
 
+        self.params_page = ParamScanPage(self._lang)
+        self.tabs.addTab(convert_page, self._t("tab.convert"))
+        self.tabs.addTab(self.params_page, self._t("tab.params"))
+        outer.addWidget(self.tabs, stretch=1)
+
     def _build_header(self) -> QHBoxLayout:
         header = QHBoxLayout()
         title_col = QVBoxLayout()
@@ -448,7 +446,10 @@ class MainWindow(QMainWindow):
         paths = [Path(url.toLocalFile()) for url in event.mimeData().urls() if url.isLocalFile()]
         if not paths:
             return
-        self.add_sources(paths)
+        if self.tabs.currentIndex() == 1:
+            self.params_page.add_files(paths)
+        else:
+            self.add_sources(paths)
         event.acceptProposedAction()
 
     def _set_drag_active(self, active: bool) -> None:

@@ -181,6 +181,19 @@ QHeaderView::section {
     font-size: 9pt;
 }
 QTableCornerButton::section { background-color: #1a2129; border: none; }
+QTabWidget::pane { border: none; background: transparent; margin-top: 2px; }
+QTabBar::tab {
+    background-color: #1a2129;
+    color: #9fb0c3;
+    border: 1px solid #2a3542;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 6px 18px;
+    margin-right: 2px;
+}
+QTabBar::tab:selected { background-color: #232d39; color: #dbe7f3; border-color: #31404f; }
+QTabBar::tab:hover { color: #dbe7f3; }
 """
 
 

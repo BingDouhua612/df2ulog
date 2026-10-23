@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GUI: parameter table dialog showing every PARM change (name / value /
   time), with search, multi-select and copy-to-clipboard; `ConversionResult`
   now carries `param_changes` (additive, backward compatible).
+- GUI: standalone **Parameters** tab: drop a log to scan PARM records only
+  (no `.ulg` conversion), switch between several files and copy rows.
 
 ## [0.1.2] - 2026-10-19
 

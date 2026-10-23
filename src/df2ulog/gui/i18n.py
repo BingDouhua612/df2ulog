@@ -117,6 +117,19 @@ _ZH: dict[str, str] = {
     "params.empty": "该日志没有 PARM 参数记录",
     "params.copy": "复制全部",
     "params.close": "关闭",
+    "tab.convert": "批量转换",
+    "tab.params": "参数查看",
+    "params.drop.title": "拖入日志查看参数表",
+    "params.drop.hint": "只扫描参数，不生成 .ulg",
+    "params.add": "选择文件…",
+    "params.choose": "选择 DataFlash 日志（参数查看）",
+    "params.queued": "已加入 {count} 个文件，正在扫描…",
+    "params.scanning": "正在扫描：{name}",
+    "params.ready": "已扫描 {count} 个文件",
+    "params.scan_error": "扫描失败（{name}）：{message}",
+    "params.file_item": "{name}（{count} 条）",
+    "params.file_item_error": "{name}（失败）",
+    "params.no_files": "尚未选择文件",
 }
 
 _EN: dict[str, str] = {
@@ -225,6 +238,19 @@ _EN: dict[str, str] = {
     "params.empty": "No PARM records in this log",
     "params.copy": "Copy all",
     "params.close": "Close",
+    "tab.convert": "Batch conversion",
+    "tab.params": "Parameters",
+    "params.drop.title": "Drop a log to view its parameters",
+    "params.drop.hint": "Scans parameters only; no .ulg is written",
+    "params.add": "Choose files…",
+    "params.choose": "Choose DataFlash logs (parameters)",
+    "params.queued": "Added {count} file(s), scanning…",
+    "params.scanning": "Scanning: {name}",
+    "params.ready": "{count} file(s) scanned",
+    "params.scan_error": "Scan failed ({name}): {message}",
+    "params.file_item": "{name} ({count} records)",
+    "params.file_item_error": "{name} (failed)",
+    "params.no_files": "No file selected",
 }
 
 STRINGS: dict[str, dict[str, str]] = {LANG_ZH: _ZH, LANG_EN: _EN}

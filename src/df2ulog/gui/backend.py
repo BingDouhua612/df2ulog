@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from ..converter import ConversionOptions, ConversionResult, convert_file
-from ..df_source import detect_format
+from ..df_source import DataFlashSource, detect_format, scan_metadata
 from ..errors import (
     EXIT_CONVERT,
     EXIT_INPUT,
@@ -310,3 +310,55 @@ def run_batch(
         if on_item is not None:
             on_item(index, item)
     return BatchOutcome(items=tuple(items))
+
+
+# ---------------------------------------------------------------------------
+# Parameter scan (no conversion): read-only pass A, used by the parameters tab
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class ParamScanResult:
+    path: Path
+    source_format: str
+    size: int
+    firmware: str | None
+    frame: str | None
+    param_changes: tuple[tuple[str, float, int], ...]
+    warnings: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class ParamScanOutcome:
+    ok: bool
+    message: str = ""
+    error_code: int = 0
+    result: ParamScanResult | None = None
+
+
+def scan_params(source_path: Path) -> ParamScanOutcome:
+    """Scan only metadata/PARM records; never writes an output file."""
+    path = Path(source_path)
+    if not path.is_file():
+        return ParamScanOutcome(
+            ok=False, message=f"input file not found: {path}", error_code=EXIT_INPUT
+        )
+    try:
+        with DataFlashSource(path) as source:
+            meta, _registry = scan_metadata(source)
+        result = ParamScanResult(
+            path=path,
+            source_format=meta.source_format,
+            size=path.stat().st_size,
+            firmware=meta.firmware,
+            frame=meta.frame,
+            param_changes=tuple(meta.param_changes),
+            warnings=tuple(meta.warnings),
+        )
+        return ParamScanOutcome(ok=True, result=result)
+    except (InputFormatError, DataFlashReadError) as exc:
+        return ParamScanOutcome(ok=False, message=str(exc), error_code=EXIT_INPUT)
+    except Exception as exc:  # noqa: BLE001 - GUI shows a friendly message
+        return ParamScanOutcome(
+            ok=False, message=f"未预期的错误：{exc}", error_code=EXIT_CONVERT
+        )

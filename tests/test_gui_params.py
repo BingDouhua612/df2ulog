@@ -1,4 +1,5 @@
 import os
+import time
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -13,6 +14,7 @@ from df2ulog.converter import ConversionOptions, convert_file
 from df2ulog.gui.app import MainWindow
 from df2ulog.gui.backend import ConversionOutcome
 from df2ulog.gui.i18n import LANG_EN, LANG_ZH
+from df2ulog.gui.params_page import ParamScanPage
 from df2ulog.gui.params_view import ParamTableDialog
 
 
@@ -62,3 +64,37 @@ def test_params_button_enabled_after_conversion(qapp, tmp_path):
     )
     assert window.params_button.isEnabled()
     window.close()
+
+
+def _wait_until(qapp, predicate, timeout=30.0):
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        qapp.processEvents()
+        if predicate():
+            return True
+        time.sleep(0.02)
+    return False
+
+
+def test_params_tab_scans_without_conversion(qapp, tmp_path):
+    fx = make_minimal_fixture(tmp_path)
+    window = MainWindow()
+    assert window.tabs.count() == 2
+    window.tabs.setCurrentIndex(1)
+    page = window.params_page
+    page.add_files([fx.bin_path])
+
+    assert _wait_until(qapp, lambda: not page._busy and page._scanned >= 1)
+    qapp.processEvents()
+    assert page.table_view.table.rowCount() == 2
+    assert page.table_view.table.item(0, 1).text() == "TEST_PARAM"
+    assert not list(tmp_path.glob("*.ulg")), "parameters tab must not convert"
+    window.close()
+
+
+def test_params_tab_language_switch(qapp):
+    page = ParamScanPage(LANG_ZH)
+    page.set_language(LANG_EN)
+    assert page.drop_label.text() == "Drop a log to view its parameters"
+    assert page.table_view.table.horizontalHeaderItem(1).text() == "Parameter"
+    page.deleteLater()

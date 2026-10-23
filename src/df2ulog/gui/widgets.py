@@ -5,7 +5,7 @@ from __future__ import annotations
 import html
 from importlib.resources import files
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import (
     QColor,
     QFont,
@@ -15,7 +15,7 @@ from PySide6.QtGui import (
     QPen,
     QPixmap,
 )
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QFrame, QWidget
 
 from .i18n import LANG_ZH, normalize_lang, tr
 
@@ -241,3 +241,20 @@ def batch_summary_html(outcome, lang: str = LANG_ZH) -> str:
         )
     parts.append("</div>")
     return "".join(parts)
+
+class DropZone(QFrame):
+    """Clickable, drag-highlightable drop target."""
+
+    clicked = Signal()
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.setObjectName("DropZone")
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setMinimumHeight(76)
+        self.setProperty("dragging", False)
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.clicked.emit()
+        super().mousePressEvent(event)
